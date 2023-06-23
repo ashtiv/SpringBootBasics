@@ -214,3 +214,72 @@ The problem with this approach is that it tightly couples  `MyController`  to  `
 Moreover, if we had multiple implementations of  `MyService`, we would have to manually instantiate the correct implementation in the constructor of  `MyController`. This can quickly become tedious and error-prone.
 
 Using  `@Component`  and  `@Autowired`  annotations allows  Spring  to handle the instantiation and injection of dependencies automatically. This makes the code more flexible, maintainable, and easier to manage.
+# Dynamic Auto Wiring and Troubleshooting - @Primary
+
+In Spring Framework, we can use  `@Primary`  annotation to indicate that a particular bean should be given preference when multiple beans of the same type are candidates to be autowired by other components.
+
+For example, let's say we have two implementations of a  service interface  `MyService`:
+```
+@Service
+public class MyServiceImplOne implements MyService {
+  // implementation
+}
+
+@Service
+public class MyServiceImplTwo implements MyService {
+  // implementation
+}
+
+```
+
+Now, if we try to autowire  `MyService`  in another component, we'll get an exception because  Spring  doesn't know which implementation to use:
+```
+@Component
+public class MyComponent {
+  @Autowired
+  private MyService myService; // throws NoUniqueBeanDefinitionException
+}
+
+```
+
+To solve this problem, we can use  `@Primary`  annotation to indicate that one of the beans should be given preference:
+```
+@Service
+@Primary
+public class MyServiceImplOne implements MyService {
+  // implementation
+}
+
+@Service
+public class MyServiceImplTwo implements MyService {
+  // implementation
+}
+
+```
+
+Now, if we try to autowire  `MyService`  in another component, Spring will use  `MyServiceImplOne`  by default:
+```
+@Component
+public class MyComponent {
+  @Autowired
+  private MyService myService; // uses MyServiceImplOne
+}
+
+```
+
+# Fastest Approach to Solve All Your Exceptions
+
+Exception handling  is an important part of any software application. Here are some tips to quickly solve exceptions:
+
+1.  Read the Exception message: The first step in solving an  exception  is to read the exception message. The message will often give you a clue as to what went wrong.
+    
+2.  Check the Stack Trace: The  stack trace  will tell you where the exception occurred in your code. Look at the top of the stack trace to see the method that threw the exception.
+    
+3.  Google the Exception: Copy the exception message and search it on Google. You'll often find discussions on forums or  Stack Overflow  that can help you solve the problem.
+    
+4.  Check the Code: Look at the code that threw the exception and see if there are any obvious errors. Check for  null values,  incorrect variable types, and other common mistakes.
+    
+5.  Use a Debugger: If you still can't solve the problem, use a  debugger  to step through your code and see where the exception is occurring. This can help you pinpoint the problem.
+    
+
+By following these steps, you can quickly solve most exceptions and keep your application running smoothly.
