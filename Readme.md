@@ -35,6 +35,25 @@ For example, let's say we have two classes:  `BinarySearch`  and  `BubbleSort`. 
 
 If we want to use the  `BinarySearch`  class to search a sorted array of integers, we need to first sort the array using the  `BubbleSort`  class. This creates a tight coupling between the two classes, as any changes made to the  `BubbleSort`  class will affect the  `BinarySearch`  class.
 
+```
+public class BinarySearch {
+    public int search(int[] numbers, int numberToSearchFor) {
+        BubbleSort bubbleSort = new BubbleSort();
+        int[] sortedNumbers = bubbleSort.sort(numbers);
+        // Binary search algorithm implementation
+        return 0;
+    }
+}
+
+public class BubbleSort {
+    public int[] sort(int[] numbers) {
+        // Bubble sort algorithm implementation
+        return numbers;
+    }
+}
+
+```
+
 ### Step 3 - Making the Binary  Search Algorithm  Example Loosely Coupled
 
 In Step 3, we will make the Binary Search Algorithm example loosely coupled by introducing an interface. An interface defines a set of methods that a class must implement. By using an interface, we can decouple the  `BinarySearch`  and  `BubbleSort`  classes.
@@ -42,6 +61,43 @@ In Step 3, we will make the Binary Search Algorithm example loosely coupled by i
 For example, we can create an interface called  `SortAlgorithm`  that defines a single method  `sort`  that takes an array of integers as input and returns a sorted array of integers. The  `BubbleSort`  class will implement the  `SortAlgorithm`  interface, and the  `BinarySearch`  class will depend on the  `SortAlgorithm`  interface instead of the  `BubbleSort`  class.
 
 This decouples the  `BinarySearch`  and  `BubbleSort`  classes, making them easier to maintain and modify.
+```
+public interface SortAlgorithm {
+    int[] sort(int[] numbers);
+}
+
+public class BubbleSort implements SortAlgorithm {
+    public int[] sort(int[] numbers) {
+        // Bubble sort algorithm implementation
+        return numbers;
+    }
+}
+
+public class BinarySearch {
+    private SortAlgorithm sortAlgorithm;
+
+    public BinarySearch(SortAlgorithm sortAlgorithm) {
+        this.sortAlgorithm = sortAlgorithm;
+    }
+
+    public int search(int[] numbers, int numberToSearchFor) {
+        int[] sortedNumbers = sortAlgorithm.sort(numbers);
+        // Binary search algorithm implementation
+        return 0;
+    }
+}
+
+```
+
+To use the updated code, we can create instances of the  `BubbleSort`  and  `BinarySearch`  classes as follows:
+```
+SortAlgorithm sortAlgorithm = new BubbleSort();
+BinarySearch binarySearch = new BinarySearch(sortAlgorithm);
+int[] numbers = {1, 2, 3, 4, 5};
+int numberToSearchFor = 3;
+int index = binarySearch.search(numbers, numberToSearchFor);
+System.out.println("Number found at index: " + index);
+```
 
 ### Step 4 - Using Spring Framework to Manage Dependencies - @Component, @Autowired
 
