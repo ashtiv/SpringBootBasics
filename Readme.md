@@ -157,3 +157,60 @@ When we use  `@Component`  to mark a class as a Spring-managed component, Spring
 When we use  `@Autowired`  to inject dependencies into a component, Spring will look for a matching component in its context and inject it into the component. Spring uses a number of strategies to resolve dependencies, such as by type, by name, or by using  `@Qualifier`.
 
 By understanding what is happening in the background when we use  Spring annotations, we can better manage dependencies in our application and troubleshoot issues that may arise.
+
+## Example 
+here's a simple example that shows how  `@Component`  and  `@Autowired`  annotations make  dependency injection  much simpler:
+```
+@Component
+public class MyService {
+  public void doSomething() {
+    System.out.println("Doing something...");
+  }
+}
+
+@Component
+public class MyController {
+  @Autowired
+  private MyService myService;
+
+  public void doSomethingInController() {
+    myService.doSomething();
+  }
+}
+
+```
+
+In this example, we have a  `MyService`  class that does some work, and a  `MyController`  class that depends on  `MyService`. We mark both classes with  `@Component`  to indicate that they are Spring-managed beans.
+
+We also use  `@Autowired`  annotation to inject an instance of  `MyService`  into  `myService`  field in  `MyController`.
+
+Now, here's the same code without using  `@Component`  and  `@Autowired`  annotations:
+
+```
+public class MyService {
+  public void doSomething() {
+    System.out.println("Doing something...");
+  }
+}
+
+public class MyController {
+  private MyService myService;
+
+  public MyController() {
+    this.myService = new MyService();
+  }
+
+  public void doSomethingInController() {
+    myService.doSomething();
+  }
+}
+
+```
+
+In this example, we manually create an instance of  `MyService`  in the constructor of  `MyController`  and assign it to  `myService`  field.
+
+The problem with this approach is that it tightly couples  `MyController`  to  `MyService`. If we decide to change the implementation of  `MyService`  in the future, we would have to modify the constructor of  `MyController`  to use the new implementation.
+
+Moreover, if we had multiple implementations of  `MyService`, we would have to manually instantiate the correct implementation in the constructor of  `MyController`. This can quickly become tedious and error-prone.
+
+Using  `@Component`  and  `@Autowired`  annotations allows  Spring  to handle the instantiation and injection of dependencies automatically. This makes the code more flexible, maintainable, and easier to manage.
