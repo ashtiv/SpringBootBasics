@@ -366,3 +366,70 @@ Spring Integration  is a framework for building message-driven applications usin
 ## Conclusion
 
 Spring Framework is a powerful and popular framework for building Java applications. In this tutorial, we learned about constructor and setter injection in Spring, as well as the  core modules  of the Spring Framework. By understanding these concepts, you'll be well on your way to building robust and maintainable Spring applications.
+
+## Step 10 - Why is Spring Framework Popular in the Java World?
+
+Spring Framework is one of the most popular frameworks for building Java applications. Here are some of the reasons why:
+
+### Dependency Injection
+
+Spring Framework provides a powerful and flexible  dependency injection mechanism  that makes it easy to manage dependencies and decouple components in a Java application. With Spring's IoC container, you can easily wire together your application's components and manage their lifecycle.
+
+### Modularity
+
+Spring Framework is designed to be modular, which means that you can use only the components and features that you need in your application. This makes it easy to build applications that are lightweight and optimized for performance.
+
+### Integration
+
+Spring Framework provides integration with a wide variety of other technologies and frameworks, including  Hibernate,  JPA, and many others. This makes it easy to build applications that work seamlessly with existing systems and technologies.
+
+### Testability
+
+Spring Framework's modularity and  dependency injection  mechanism make it easy to write  unit tests  for your Java applications. With Spring, you can easily mock dependencies and test each component of your application in isolation.
+
+### Community
+
+Spring Framework has a large and active community of developers and users who contribute to the project and provide support to others. This makes it easy to find help and resources when you need them, and ensures that the framework is constantly evolving and improving.
+
+## Step 17 - DO NOT SKIP: New to Maven and Eclipse
+
+If you're new to Maven and Eclipse, here's a quick overview of how to get started:
+
+1.  Install Eclipse: Download and install Eclipse from the official website.
+    
+2.  Install Maven: Download and install Maven from the official website.
+    
+3.  Create a new  Maven project: In Eclipse, go to File > New > Maven Project. Follow the prompts to create a new Maven project.
+    
+4.  Add dependencies: To add dependencies to your project, add them to the "pom.xml" file in your project. Maven will automatically download and manage the dependencies for you.
+    
+5.  Build and run your project: To build and run your project, use the  Maven commands  "mvn clean install" and "mvn exec:java" respectively.
+    
+
+Here's an example of a simple Maven project:
+```
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>my-app</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+
+```
+
+In this example, we've defined a Maven project with a single dependency on  JUnit  4.12. When we buildand run the project using Maven, it will automatically download and include the  JUnit library  in our project.
+
+To summarize, Maven is a powerful  build tool  that makes it easy to manage dependencies and build Java projects. Eclipse is a popular  IDE  that provides an  integrated environment  for developing Java applications. By using Maven and Eclipse together, you can streamline your development process and build high-quality, maintainable Java applications.
