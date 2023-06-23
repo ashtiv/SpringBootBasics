@@ -283,3 +283,86 @@ Exception handling  is an important part of any software application. Here are s
     
 
 By following these steps, you can quickly solve most exceptions and keep your application running smoothly.
+## Step 7 - Spring Injection using Java Constructor and Setter Methods
+
+Spring Framework  provides two main ways to inject dependencies into an object:  constructor injection  and  setter injection.
+
+### Constructor Injection
+
+Constructor injection involves passing the dependencies as arguments to the constructor of the object. Here's an example:
+
+```
+public class MyService {
+    private final MyDependency myDependency;
+    
+    public MyService(MyDependency myDependency) {
+        this.myDependency = myDependency;
+    }
+    
+    // ...
+}
+
+```
+
+In this example, the  `MyService`  class has a dependency on  `MyDependency`, which is passed as an argument to the constructor. The  `final`  keyword is used to ensure that the  `myDependency`  field is set only once and cannot be changed.
+
+### Setter Injection
+
+Setter injection, on the other hand, involves calling  setter methods  on the object to set the dependencies. Here's an example:
+
+```
+public class MyService {
+    private MyDependency myDependency;
+    
+    public void setMyDependency(MyDependency myDependency) {
+        this.myDependency = myDependency;
+    }
+    
+    // ...
+}
+
+```
+
+In this example, the  `MyService`  class has a  setter method  `setMyDependency`  that sets the  `myDependency`  field.
+
+### Choosing between Constructor and Setter Injection
+
+Both constructor and setter injection have their pros and cons. Constructor injection ensures that the dependencies are set at the time of  object creation  and cannot be changed later. Setter injection, on the other hand, allows for more flexibility and can be used to set  optional dependencies.
+
+In general, it's recommended to use constructor injection for  mandatory dependencies  and setter injection for optional dependencies.
+
+## Step 8 - Spring Framework Modules
+
+Spring Framework is a  modular framework, which means that it is composed of several modules, each of which provides a different set of features and functionality. Here are some of the core modules of Spring:
+
+### Spring Core
+
+The  Spring Core module  provides the basic components of the Spring Framework, including the  IoC container  and DI functionality. This module is the foundation of the Spring Framework and is required by all other modules.
+
+### Spring MVC
+
+The  Spring MVC module  provides a web framework for building  web applications  using Spring. It includes features such as  request mapping,  data binding, and  view resolution.
+
+### Spring Data
+
+The Spring Data module provides a  unified API  for accessing various types of  data sources, including relational databases, NoSQL databases, and more. It includes modules such as  Spring Data JPA,  Spring Data MongoDB, and  Spring Data Redis.
+
+### Spring Security
+
+The  Spring Security module  provides security features for Spring applications, including authentication and authorization. It includes features such as  user authentication, access control, and  secure communication.
+
+### Spring Boot
+
+Spring Boot is a framework for building standalone Spring applications that are easy to deploy and run. It includes features such as auto-configuration, embedded servers, and production-ready metrics.
+
+### Spring Cloud
+
+Spring Cloud  is a collection of tools and frameworks for building distributed systems and microservices using Spring. It includes modules such as  Spring Cloud Config,  Spring Cloud Netflix, and  Spring Cloud Stream.
+
+### Spring Integration
+
+Spring Integration  is a framework for building message-driven applications using Spring. It includes features such as  channel adapters,  message routers, and  message transformers.
+
+## Conclusion
+
+Spring Framework is a powerful and popular framework for building Java applications. In this tutorial, we learned about constructor and setter injection in Spring, as well as the  core modules  of the Spring Framework. By understanding these concepts, you'll be well on your way to building robust and maintainable Spring applications.
