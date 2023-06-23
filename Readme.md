@@ -112,3 +112,48 @@ By using the  `@Component`  and  `@Autowired`  annotations, we can easily manage
 ## Conclusion
 
 In this tutorial, we learned about the Spring Framework and its levels. We also covered the steps to set up a new Spring Boot project, understand tight coupling, make an example loosely coupled, and use Spring Framework to manage dependencies. Spring Framework is a powerful and popular  application framework  that provides a comprehensive programming and configuration model for modern Java-based enterprise applications.
+## Step 4 - Using  Spring Framework  to Manage Dependencies -  `@Component`,  `@Autowired`
+
+In Step 4, we use Spring Framework to manage dependencies between components in our Java application. Spring provides a number of annotations that we can use to define and inject dependencies between components, such as  `@Component`  and  `@Autowired`.
+
+`@Component`  is an annotation that marks a  Java class  as a Spring-managed component. Spring will automatically create an instance of the component and manage its lifecycle. We can use the  `@Component`  annotation to define a component that implements the  `SortAlgorithm`  interface:
+
+```
+@Component
+public class BubbleSort implements SortAlgorithm {
+    public int[] sort(int[] numbers) {
+        // Bubble sort algorithm implementation
+        return numbers;
+    }
+}
+
+```
+
+`@Autowired`  is an annotation that tells Spring to inject a dependency into a Spring-managed component. We can use the  `@Autowired`  annotation to inject the  `SortAlgorithm`  implementation into the  `BinarySearch`  class:
+
+```
+@Component
+public class BinarySearch {
+    @Autowired
+    private SortAlgorithm sortAlgorithm;
+
+    public int search(int[] numbers, int numberToSearchFor) {
+        int[] sortedNumbers = sortAlgorithm.sort(numbers);
+        // Binary search algorithm implementation
+        return 0;
+    }
+}
+
+```
+
+By using  `@Component`  and  `@Autowired`, we can easily manage dependencies between components in our  Java  application and make our code more modular and maintainable.
+
+## Step 5 - What is happening in the background?
+
+In Step 5, we look at what is happening in the background when we use annotations like  `@Component`  and  `@Autowired`  in our Spring application.
+
+When we use  `@Component`  to mark a class as a Spring-managed component, Spring will automatically create an instance of the component and manage its lifecycle. Spring maintains a context of all the components in our application, which allows it to manage dependencies between components and resolve  circular dependencies.
+
+When we use  `@Autowired`  to inject dependencies into a component, Spring will look for a matching component in its context and inject it into the component. Spring uses a number of strategies to resolve dependencies, such as by type, by name, or by using  `@Qualifier`.
+
+By understanding what is happening in the background when we use  Spring annotations, we can better manage dependencies in our application and troubleshoot issues that may arise.
