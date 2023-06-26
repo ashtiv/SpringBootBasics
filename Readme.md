@@ -433,3 +433,407 @@ Here's an example of a simple Maven project:
 In this example, we've defined a Maven project with a single dependency on  JUnit  4.12. When we buildand run the project using Maven, it will automatically download and include the  JUnit library  in our project.
 
 To summarize, Maven is a powerful  build tool  that makes it easy to manage dependencies and build Java projects. Eclipse is a popular  IDE  that provides an  integrated environment  for developing Java applications. By using Maven and Eclipse together, you can streamline your development process and build high-quality, maintainable Java applications.
+
+## 19. Step 11 - Dependency Injection - A few more examples
+
+Dependency injection is a core concept in the Spring framework and allows for a more modular and flexible design of applications. In this step, we will go through a few more examples of how to use dependency injection in Spring.
+
+### Constructor Injection
+
+Constructor injection is a type of dependency injection where dependencies are injected through a constructor. For example, let's say we have a class  `Foo`  that depends on an interface  `Bar`. We can inject the dependency through the constructor as follows:
+
+```
+public class Foo {
+    private Bar bar;
+
+    public Foo(Bar bar) {
+        this.bar = bar;
+    }
+}
+
+```
+
+### Setter Injection
+
+Setter injection is a type of dependency injection where dependencies are injected through setter methods. For example, let's say we have a class  `Foo`  that depends on an interface  `Bar`. We can inject the dependency through a  setter method  as follows:
+
+```
+public class Foo {
+    private Bar bar;
+
+    public void setBar(Bar bar) {
+        this.bar = bar;
+    }
+}
+
+```
+
+## 20. Step 12 - Autowiring in Depth - by Name and @Primary
+
+Autowiring is a feature in Spring that allows the framework to automatically inject dependencies into a bean without the need for explicit configuration. In this step, we will go through autowiring in more depth and cover how to use it by name and with the  `@Primary`  annotation.
+
+### Autowiring by Name
+
+Autowiring by name is a way of  autowiring dependencies  in Spring by matching the  bean name  with the name of the dependency. For example, let's say we have a class  `Foo`  that depends on a bean with the name  `bar`. We can autowire the dependency by name as follows:
+
+```
+public class Foo {
+    @Autowired
+    private Bar bar;
+}
+
+```
+
+### @Primary Annotation
+
+The  `@Primary`  annotation is used to indicate that a bean should be considered the  primary bean  when multiple beans of the same type are present. For example, let's say we have two beans of type  `Bar`:
+
+```
+@Component
+public class BarOne implements Bar {}
+
+@Component
+@Primary
+public class BarTwo implements Bar {}
+
+```
+
+In this case, if we autowire a  `Bar`  dependency, Spring will inject an instance of  `BarTwo`  because it is marked as the primary bean.
+
+## 21. Step 13 - Autowiring in Depth - @Qualifier annotation
+
+The  `@Qualifier`  annotation is used in Spring to specify which bean to autowire when there are multiple beans of the same type. For example, let's say we have two beans of type  `Bar`:
+
+```
+@Component
+@Qualifier("one")
+public class BarOne implements Bar {}
+
+@Component
+@Qualifier("two")
+public class BarTwo implements Bar {}
+
+```
+
+In this case, if we want to autowire a  `Bar`  dependency with the  `one`  qualifier, we can use the  `@Qualifier`  annotation as follows:
+
+```
+public class Foo {
+    @Autowired
+    @Qualifier("one")
+    private Bar bar;
+}
+
+```
+
+This tells Spring to inject an instance of  `BarOne`  because it is the bean with the  `one`  qualifier.
+## 22. Step 14 - Scope of a Bean - Prototype and Singleton
+
+In Spring, the scope of a bean defines the lifecycle and visibility of the bean instance. The two most common scopes in Spring are prototype and singleton.
+
+### Singleton Scope
+
+The default scope in Spring is singleton, which means that only one instance of the bean is created and shared for all requests for that bean. For example, let's say we have a class  `Foo`:
+
+```
+@Component
+public class Foo {}
+
+```
+
+By default, Spring will create a single instance of  `Foo`  and share it across all requests for  `Foo`.
+
+### Prototype Scope
+
+Prototype scope in Spring means that a new instance of the bean is created for each request for that bean. For example, let's say we have a class  `Bar`:
+
+```
+@Component
+@Scope("prototype")
+public class Bar {}
+
+```
+
+In this case, each time we request a  `Bar`  instance from Spring, a new instance of  `Bar`  will be created.
+
+## 23. Step 15 - Complex Scope Scenarios of a Spring Bean - Mix Prototype and Singleton
+
+In more complex scenarios, we may want to mix prototype and  singleton scopes  for different beans. For example, let's say we have a class  `Foo`  that depends on a prototype-scoped bean  `Bar`:
+
+```
+@Component
+public class Foo {
+    @Autowired
+    private Bar bar;
+}
+
+@Component
+@Scope("prototype")
+public class Bar {}
+
+```
+
+In this case, each time we request a  `Foo`  instance from Spring, a new instance of  `Bar`  will be created and injected into  `Foo`.
+
+## 24. Step 15B - Difference Between Spring Singleton and GOF Singleton
+
+It is important to note that the  Spring singleton scope  is different from the  singleton pattern  in the  Gang of Four  (GOF) design patterns. In the GOF singleton pattern, there is only one instance of a class globally, whereas in  Spring singleton  scope, there is only one instance of a bean per Spring container.
+
+For example, let's say we have a class  `SingletonClass`  implemented as a GOF singleton:
+
+```
+public class SingletonClass {
+    private static SingletonClass instance = new SingletonClass();
+    private SingletonClass() {}
+    public static SingletonClass getInstance() {
+        return instance;
+    }
+}
+
+```
+
+In this case, there is only one instance of  `SingletonClass`  globally.
+
+On the other hand, if we have a  Spring bean  with  singleton scope:
+
+```
+@Component
+public class SingletonBean {}
+
+```
+
+In this case, there is only one instance of  `SingletonBean`  per Spring container.
+Let's consider an example to illustrate this difference. Suppose we have a simple bean called  `Counter`  that increments an  internal counter  each time it is called:
+
+```
+@Component
+@Scope("prototype")
+public class Counter {
+    private int count = 0;
+
+    public int increment() {
+        return ++count;
+    }
+}
+
+```
+
+If we inject this bean into another bean as a prototype, a new instance of  `Counter`  will be created each time it is requested:
+
+```
+@Component
+public class PrototypeBean {
+    @Autowired
+    private Counter counter;
+
+    public int incrementCounter() {
+        return counter.increment();
+    }
+}
+
+```
+
+On the other hand, if we inject this bean into another bean as a singleton, only one instance of  `Counter`  will be created and shared among all requests:
+
+```
+@Component
+@Scope("singleton")
+public class SingletonBean {
+    @Autowired
+    private Counter counter;
+
+    public int incrementCounter() {
+        return counter.increment();
+    }
+}
+
+```
+
+Now, let's test these two scenarios by creating a new instance of each bean and invoking the  `incrementCounter()`  method on each:
+
+```
+@Component
+public class Test {
+    @Autowired
+    private PrototypeBean prototypeBean;
+
+    @Autowired
+    private SingletonBean singletonBean;
+
+    public void runTest() {
+        // Prototype scope
+        System.out.println("Prototype scope:");
+        System.out.println(prototypeBean.incrementCounter()); // 1
+        System.out.println(prototypeBean.incrementCounter()); // 1
+
+        // Singleton scope
+        System.out.println("Singleton scope:");
+        System.out.println(singletonBean.incrementCounter()); // 1
+        System.out.println(singletonBean.incrementCounter()); // 2
+    }
+}
+
+```
+
+In the prototype scope, a new instance of  `Counter`  is created each time  `incrementCounter()`  is called, so the counter is always reset to zero. In the  singleton scope, only one instance of  `Counter`  is created, so the counter is incremented each time  `incrementCounter()`  is called. Therefore, the output of this test would be:
+
+```
+Prototype scope:
+1
+1
+Singleton scope:
+1
+2
+
+```
+
+As we can see, the behavior of the two scenarios is different due to the difference in scope. The  prototype scope  creates a new instance of the bean each time it is requested, while the singleton scope creates only one instance of the bean that is shared among all requests.
+
+# Step 16 - Using Component Scan to scan for beans
+
+In Spring  Framework, we can use component scan to scan for beans in our application. Component scan is a way to automatically detect and register beans in the  Spring container  based on certain criteria such as  class annotations.
+
+## Enabling Component Scan
+
+We can enable component scan in our  Spring application  by adding the  `@ComponentScan`  annotation to a configuration class. For example:
+
+```
+@Configuration
+@ComponentScan("com.example.demo")
+public class AppConfig {
+    // configuration code here
+}
+
+```
+
+In the above example, we have enabled component scan for the package  `com.example.demo`. This means that  Spring  will scan this package and its sub-packages for classes with certain annotations (such as  `@Component`,  `@Service`,  `@Repository`, etc.) and register them as beans in the Spring container.
+
+## Defining Component Scan Filters
+
+We can also define filters for component scan to include or exclude certain classes from being registered as beans. There are several types of filters we can use, such as  `@ComponentScan.Filter`,  `RegexPatternTypeFilter`,  `AspectJTypeFilter`, etc.
+
+For example, if we want to include only classes annotated with  `@Controller`  in our component scan, we can do:
+
+java
+
+Copy
+
+```
+@Configuration
+@ComponentScan(basePackages = "com.example.demo", includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class))
+public class AppConfig {
+    // configuration code here
+}
+
+```
+
+In the above example, we have used  `@ComponentScan.Filter`  to define an  annotation filter  that includes only classes annotated with  `@Controller`.
+
+# Step 17 - Lifecycle of a Bean - @PostConstruct and @PreDestroy
+
+In Spring Framework, the lifecycle of a bean refers to the various stages in the life of a bean, from its creation to its destruction. During the lifecycle of a bean, we can perform certain actions, such as initializing the bean, cleaning up resources, etc. We can use the  `@PostConstruct`  and  `@PreDestroy`  annotations to define methods that should be executed after the bean has been created and before the bean is destroyed, respectively.
+
+## @PostConstruct Annotation
+
+The  `@PostConstruct`  annotation is used to specify a method that should be called immediately after the bean has been created, and after all dependencies have been injected. The method annotated with  `@PostConstruct`  can be used to perform any  initialization logic  for the bean.
+
+For example:
+
+```
+@Component
+public class MyBean {
+ 
+    @PostConstruct
+    public void init() {
+        // initialization logic here
+    }
+}
+
+```
+
+In the above example, the  `init()`  method will be called immediately after the  `MyBean`  has been created, and after all dependencies have been injected.
+
+## @PreDestroy Annotation
+
+The  `@PreDestroy`  annotation is used to specify a method that should be called just before the bean is destroyed. The method annotated with  `@PreDestroy`  can be used to perform any  cleanup logic  for the bean.
+
+For example:
+
+```
+@Component
+public class MyBean {
+ 
+    @PreDestroy
+    public void cleanup() {
+        // cleanup logic here
+    }
+}
+
+```
+
+In the above example, the  `cleanup()`  method will be called just before the  `MyBean`  is destroyed. This method can be used to release any resources held by the bean, such as closing a database connection or releasing a file handle.
+
+It is important to note that the  `@PostConstruct`  and  `@PreDestroy`  annotations only work with singleton scoped beans. If a bean is defined with a different scope, such as  prototype scope, these annotations will not be effective.
+Step 19 - Removing Spring Boot in Basic Application
+In this step, we remove the Spring Boot framework from our basic application and replace it with the Spring Framework. Here are the steps we need to follow:
+
+Remove the spring-boot-starter-web dependency from the pom.xml file.
+Add the spring-webmvc and spring-context dependencies to the pom.xml file.
+Create a WebAppInitializer class that extends the AbstractAnnotationConfigDispatcherServletInitializer class.
+In the WebAppInitializer class, implement the getRootConfigClasses() and getServletConfigClasses() methods to define the root configuration and the servlet configuration.
+Create a WebConfig class that extends the WebMvcConfigurerAdapter class and annotate it with the @Configuration annotation.
+In the WebConfig class, override the configureDefaultServletHandling() method and call the enable() method on the DefaultServletHandlerConfigurer object.
+In the WebConfig class, create a ViewResolver bean to configure the view resolver.
+Create a controller class that handles requests and returns a view.
+Step 20 - Fixing minor stuff - Add Logback and Close Application Context
+In this final step, we add the Logback logging framework to our application and make sure that the application context is closed properly when the application shuts down.
+
+Add the Logback dependencies to the pom.xml file:
+xml
+Copy
+<dependencies>
+    <!-- ... -->
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.2.3</version>
+    </dependency>
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>1.2.3</version>
+    </dependency>
+</dependencies>
+Create a logback.xml file in the src/main/resources directory to configure Logback. Here's an example configuration:
+xml
+Copy
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>
+Note: The above Logback configuration will log messages to the console in a specific format.
+
+In the WebConfig class, add the following method to configure Logback:
+java
+Copy
+@Bean
+public LoggerContext loggerContext() {
+    return (LoggerContext) LoggerFactory.getILoggerFactory();
+}
+In the Main class, add the following code to close the application context when the application shuts down:
+java
+Copy
+public static void main(String[] args) {
+    try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
+        // Run the application
+    } catch (Exception e) {
+        LOGGER.error("Error while running the application", e);
+    }
+}
+Note: The AnnotationConfigApplicationContext class implements the AutoCloseable interface, which means that we can use it in a try-with-resources statement to automatically close the application context when the application exits.
