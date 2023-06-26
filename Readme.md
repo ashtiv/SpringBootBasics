@@ -1208,3 +1208,55 @@ public class MyService {
 ```
 
 In this example, we have used  `@PropertySource`  to specify the location of the  properties file. We can then inject the value of the  `my.property`  key into the  `myProperty`  field of the MyService bean using  `@Value`.
+
+## Understanding the World Before Spring Boot
+
+Before Spring Boot, building a Spring-based application required a lot of manual configuration. It involved setting up a project with the required dependencies, configuring the web server, setting up the  database connection, and configuring the  Spring framework  itself.
+
+Developers had to spend a significant amount of time and effort in configuring the application, which often led to configuration errors and inconsistencies.  Spring Boot  aims to simplify this process by providing a set of  opinionated defaults  and auto-configuration features.
+
+## Setting up  New Spring  Boot Project with Spring Initializr
+
+Spring Initializr is a web-based tool that allows developers to quickly generate a new  Spring Boot project  with the required dependencies and configurations. It provides a simple user interface to configure the project, select the required dependencies, and download the project as a zip file.
+
+Here's an example of how to create a new Spring Boot project using  Spring Initializr:
+
+1.  Go to  [https://start.spring.io/](https://start.spring.io/)
+2.  Select the required  project metadata  such as Group, Artifact and dependencies
+3.  Click "Generate" button and download the  project zip file
+4.  Extract the  zip file  to a new directory in your local machine
+
+## Build a Hello World API with Spring Boot
+
+Now that we have set up a new Spring Boot project, let's build a simple  Hello World API  using Spring Boot.
+
+Here's an example of how to build a simple Hello World API with Spring Boot:
+
+1.  Create a new Spring Boot project using Spring Initializr
+2.  Open  `src/main/java/com/example/demo/DemoApplication.java`
+3.  Add a  `@RestController`  annotation to the class to indicate that it is a REST controller
+4.  Add a  `@GetMapping`  annotation to a method in the class to handle  GET requests
+5.  Return a simple string from the method
+6.  Run the application using  `./mvnw spring-boot:run`  command
+7.  Open a  web browser  and navigate to  `http://localhost:8080`
+
+```
+@RestController
+@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @GetMapping("/")
+    public String hello() {
+        return "Hello, World!";
+    }
+}
+
+```
+
+In this example, we have annotated the  `DemoApplication`  class with  `@RestController`  and  `@SpringBootApplication`. We have also added a  `@GetMapping`  annotation to the  `hello()`  method to handle GET requests.
+
+When we run the application using  `./mvnw spring-boot:run`  command, Spring Boot starts an  embedded Tomcat server  and deploys our application to it. We can then open a web browser and navigate to  `http://localhost:8080`  to see the "Hello, World!" message returned by the API.
