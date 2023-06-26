@@ -1338,3 +1338,85 @@ Once you have included the dependency, Spring Boot DevTools will automatically d
 ## Conclusion
 
 Spring Boot DevTools can help you develop  Spring Boot applications  more efficiently by providing features such as automatic restarts, live reload, and improved error reporting. By including the  `spring-boot-devtools`  dependency in your project, you can take advantage of these features and speed up your development process.
+
+# Step 09 - Get Production Ready with  Spring Boot  - 1 - Profiles
+
+## What are Spring Profiles?
+
+-   Spring Profiles  allow us to have different configurations for our application based on active profiles.
+-   We can enable multiple profiles at once.
+-   Profiles are enabled using:
+    -   JVM system properties:  `-Dspring.profiles.active=dev`
+    -   Environment variable:  `SPRING_PROFILES_ACTIVE=dev`
+    -   As an IDE run configuration
+
+## Applying Profiles
+
+We can apply profiles in different ways:
+
+### Annotating Components
+
+```
+@Component
+@Profile("dev")
+public class DevDatasourceConfig {
+  
+}
+
+@Component
+@Profile("prod") 
+public class ProdDatasourceConfig {
+  
+}
+
+```
+
+### Annotating Configuration Classes
+
+```
+@Configuration
+@Profile("dev")
+public class DevConfig {
+  
+}
+
+```
+
+### Application Property Files
+
+`application-dev.properties`  
+`application-prod.properties`
+
+Spring will load the correct property file based on the active profile.
+
+### Bean Definition Profiles
+```
+<bean profile="dev">
+ ... 
+</bean>
+
+```
+
+## Using Profiles in our Application
+
+We can define a  `DataSource`  bean for each profile:
+```
+@Configuration
+public class DataSourceConfig {
+  
+  @Bean
+  @Profile("dev")
+  public DataSource devDataSource() {
+    return new HikariDataSource(...);  
+  }
+  
+  @Bean
+  @Profile("prod")
+  public DataSource prodDataSource() {
+    return new BasicDataSource(...);    
+  }
+}
+
+```
+
+Then we activate the relevant profile when running our application.
