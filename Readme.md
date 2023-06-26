@@ -1116,3 +1116,95 @@ MyBean myOtherAlias = context.getBean("myOtherAlias", MyBean.class);
 ```
 
 In this example, we have retrieved the bean using the original name  `myBean`, as well as the aliases  `myAlias`  and  `myOtherAlias`. All three calls will return the same instance of the  `MyBean`  bean.
+## IOC Container  vs Application Context vs  Bean Factory
+
+In Spring, an Inversion of Control (IOC) container is responsible for managing the lifecycle of beans. It creates and manages instances of beans, and injects dependencies into them. There are two types of  IOC containers  in Spring:  BeanFactory  and ApplicationContext.
+
+BeanFactory is the basic IOC container that provides the fundamental features of the IOC container. It reads  bean definitions  and creates  bean instances  lazily, i.e., only when they are requested. It is suitable for small to medium-sized applications where the performance is not a significant concern.
+
+ApplicationContext is a sub-interface of BeanFactory that provides additional features like  AOP,  message resource handling,  event publication, and internationalization support. It reads bean definitions and creates bean instances eagerly, i.e., at the time of application startup. It is suitable for large, enterprise-level applications where the performance is a significant concern.
+
+Here's an example that demonstrates the use of  ApplicationContext:
+
+```
+public class MyApp {
+    public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        MyBean myBean = context.getBean("myBean", MyBean.class);
+        myBean.doSomething();
+    }
+}
+
+```
+
+In this example, we have created an instance of the ApplicationContext by providing the path to the  XML configuration  file. We have then retrieved an instance of the  MyBean class  from the context and called its  `doSomething()`  method.
+
+## @Component vs @Service vs @Repository vs @Controller
+
+In Spring, we use annotations to mark classes as beans and to specify their roles. There are four annotations that are commonly used to mark classes as beans:  `@Component`,  `@Service`,  `@Repository`, and  `@Controller`.
+
+`@Component`  is the most basic annotation that marks a class as a Spring bean. It is used to indicate that a class is a general-purpose component that does not fall into any specific category.
+
+`@Service`  is an annotation that marks a class as a business service. It is used to indicate that a class performs some  business logic  and is usually used in the service layer of the application.
+
+`@Repository`  is an annotation that marks a class as a data access object (DAO). It is used to indicate that a class performs database operations and is usually used in the  persistence layer  of the application.
+
+`@Controller`  is an annotation that marks a class as a controller. It is used to indicate that a class handles  HTTP requests  and is usually used in the  presentation layer  of the application.
+
+Here's an example that demonstrates the use of  `@Service`:
+
+```
+@Service
+public class MyService {
+    public void doSomething() {
+        // business logic here
+    }
+}
+
+```
+
+In this example, we have marked the  MyService  class with  `@Service`  to indicate that it is a business service. We can then inject an instance of this class into other beans using  `@Autowired`.
+
+## Read values from external properties file
+
+In Spring, we can  externalize configuration  by storing values in an  external properties file. We can then read these values into our  Spring beans  using  `@Value`  annotations.
+
+Here's an example of how to define properties in an external properties file:
+
+```
+my.property=value
+
+```
+
+We can then read this property into a  Spring bean  using  `@Value`:
+
+```
+@Service
+public class MyService {
+    @Value("${my.property}")
+    private String myProperty;
+
+    public void doSomething() {
+        System.out.println("my.property = " + myProperty);
+    }
+}
+
+```
+
+In this example, we have injected the value of the  `my.property`  key into the  `myProperty`  field of the  MyService bean  using  `@Value`. We can then use this value in our business logic. We can also use  `@PropertySource`  to specify the location of the properties file.
+
+```
+@Service
+@PropertySource("classpath:my.properties")
+public class MyService {
+    @Value("${my.property}")
+    private String myProperty;
+
+    public void doSomething() {
+        System.out.println("my.property = " + myProperty);
+    }
+}
+
+```
+
+In this example, we have used  `@PropertySource`  to specify the location of the  properties file. We can then inject the value of the  `my.property`  key into the  `myProperty`  field of the MyService bean using  `@Value`.
