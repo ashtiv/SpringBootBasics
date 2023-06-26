@@ -1420,3 +1420,103 @@ public class DataSourceConfig {
 ```
 
 Then we activate the relevant profile when running our application.
+# ConfigurationProperties in Java
+
+In Java, the  `ConfigurationProperties`  annotation is used to map and bind external properties to fields in a class. This feature is commonly used in  Spring Boot  applications to externalize  configuration properties  and simplify the code.
+
+The  `ConfigurationProperties`  annotation is used on a class to indicate that the properties defined in an  external configuration file  should be bound to the fields of the class. The fields in the class should have the same name as the properties defined in the  configuration file.
+
+Here is an example of a class that uses  `ConfigurationProperties`  annotation to bind external properties:
+
+```
+@ConfigurationProperties(prefix = "example")
+public class ExampleProperties {
+    private String name;
+    private int age;
+    private List<String> hobbies;
+
+    // getters and setters
+}
+
+```
+
+In this example, the  `prefix`  attribute of the  `ConfigurationProperties`  annotation specifies the prefix of the properties that should be bound to the fields of the class. In this case, the prefix is "example".
+
+Assuming the following properties are defined in the external configuration file:
+
+```
+example.name=John
+example.age=30
+example.hobbies=reading,traveling
+
+```
+
+The properties will be bound to the corresponding fields in the  `ExampleProperties`  class.
+
+Here's another example that shows how you can use the  `@ConfigurationProperties`  annotation to bind properties to a nested class:
+
+```
+@ConfigurationProperties(prefix = "database")
+public class DatabaseProperties {
+    private String url;
+    private String username;
+    private String password;
+    private Pool pool;
+
+    // getters and setters
+
+    public static class Pool {
+        private int maxActive;
+        private int maxIdle;
+
+        // getters and setters
+    }
+}
+
+```
+
+If the following properties are defined in the external configuration file:
+
+```
+database.url=jdbc:mysql://localhost:3306/mydb
+database.username=root
+database.password=secret
+database.pool.maxActive=10
+database.pool.maxIdle=5
+
+```
+
+The properties will be bound to the corresponding fields in the  `DatabaseProperties`  class, including the  `Pool`  nested class.
+
+Here's another example that shows how you can use the  `@ConfigurationProperties`  annotation with a list of objects:
+
+```
+@ConfigurationProperties(prefix = "employees")
+public class EmployeeProperties {
+    private List<Employee> employees;
+
+    // getters and setters
+
+    public static class Employee {
+        private String name;
+        private int age;
+
+        // getters and setters
+    }
+}
+
+```
+
+If the following properties are defined in the external configuration file:
+
+```
+employees.employees[0].name=John
+employees.employees[0].age=30
+employees.employees[1].name=Jane
+employees.employees[1].age=25
+
+```
+
+The properties will be bound to the corresponding fields in the  `EmployeeProperties`  class, including the list of  `Employee`  objects.
+
+In summary, the  `ConfigurationProperties`  annotation is a powerful feature in Java that allows you to externalize configuration properties and bind them to fields in a class. This provides a simple and efficient way to manage configuration properties in an application.
