@@ -854,3 +854,265 @@ public static void main(String[] args) {
 ```
 
 Note: The  `AnnotationConfigApplicationContext`  class implements the  `AutoCloseable`  interface, which means that we can use it in a try-with-resources statement to automatically close the  application context  when the application exits.
+
+## Step 21 - Defining Spring Application Context using XML - Part 1
+
+In this step, we will be defining the  Spring application context  using XML.
+
+### What is  Spring Application  Context?
+
+The Spring  application context is a container that holds all the beans (objects) required by the application. It creates, manages, and wires the beans together. The  Spring framework  provides various implementations of the application context, such as XML-based, annotation-based, and Java-based.
+
+### How to Define Spring Application Context using XML?
+
+To define the Spring application context using XML, we need to create a  configuration file  named  `applicationContext.xml`  in the  `src/main/resources`  directory. This file will contain the bean definitions.
+
+Here's an example of  `applicationContext.xml`  file:
+
+```
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="greetingService" class="com.example.service.GreetingServiceImpl">
+        <property name="greeting" value="Hello, World!"/>
+    </bean>
+
+    <bean id="greetingController" class="com.example.controller.GreetingController">
+        <property name="greetingService" ref="greetingService"/>
+    </bean>
+
+</beans>
+
+```
+
+In this example, we have defined two beans -  `greetingService`  and  `greetingController`. The  `greetingService`  bean is of type  `GreetingServiceImpl`, which is a service that provides a greeting message. The  `greetingController`  bean is of type  `GreetingController`, which is a controller that uses the  `greetingService`  to get the  greeting message  and returns it to the client.
+
+### How to Use Spring Application Context in Code?
+
+To use the Spring application context in code, we need to create an instance of  `ClassPathXmlApplicationContext`  by passing the  configuration file path  as a parameter. Here's an example:
+
+```
+ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+GreetingController greetingController = context.getBean(GreetingController.class);
+String result = greetingController.greet();
+System.out.println(result);
+
+```
+
+In this example, we have created an instance of  `ClassPathXmlApplicationContext`  by passing the  `applicationContext.xml`  file path as a parameter. We have then retrieved the  `GreetingController`  bean from the context and called its  `greet()`  method, which returns the greeting message. The message is then printed to the console.
+
+## Step 22 - Defining Spring Application Context using XML - Part 2
+
+In the previous step, we learned how to define the Spring application context using XML. In this step, we will cover some advanced features of  Spring XML configuration.
+
+### Property Placeholder
+
+Spring provides a way to externalize the configuration using property files. We can define placeholders in the  XML configuration file  and use property files to replace those placeholders at runtime.
+
+Here's an example of how to define a  property placeholder  in the XML configuration file:
+
+```
+<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="${jdbc.driverClassName}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+</bean>
+
+```
+
+In this example, we have defined a bean of type  `BasicDataSource`  and used property placeholders for the  driver class name,  URL, username, and password. We can replace these placeholders with actual values at runtime by defining them in a property file.
+
+Here's an example of a  property file  named  `application.properties`:
+
+
+```
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/mydb
+jdbc.username=root
+jdbc.password=password
+
+```
+
+We can load this property file at runtime using  `PropertyPlaceholderConfigurer`.
+
+```
+<context:property-placeholder location="classpath:application.properties"/>
+
+```
+
+### Bean Scopes
+
+Spring provides several scopes for beans, such as singleton, prototype, request, session, and global session. The default scope is singleton, which means Spring creates only one instance of the bean and returns the same instance every time it is requested.
+
+Here's an example of how to define a  prototype scope  for a bean:
+
+xml
+
+Copy
+
+```
+<bean id="myBean" class="com.example.MyBean" scope="prototype"/>
+
+```
+
+In this example, we have defined a bean of type  `MyBean`  with a prototype scope. This means Spring creates a new instance of the bean every time it is requested.
+
+### Bean Inheritance
+
+Spring provides a way to inherit  bean definitions. We can define a  parent bean  and then create  child beans  that inherit the properties of the parent bean.
+
+Here's an example of a parentbean:
+
+```
+<bean id="parentBean" class="com.example.Parent">
+    <property name="name" value="Parent"/>
+</bean>
+
+```
+
+And here's an example of a  child bean  that inherits from the parent bean:
+
+```
+<bean id="childBean" class="com.example.Child" parent="parentBean">
+    <property name="age" value="10"/>
+</bean>
+
+```
+
+In this example, we have defined a parent bean of type  `Parent`  with a name property. We have then defined a child bean of type  `Child`  that inherits from the parent bean and adds an age property.
+
+### Aliases
+
+Spring provides a way to define  aliases  for beans. We can define multiple aliases for a single bean.
+
+Here's an example of how to define aliases for a bean:
+
+```
+<bean id="myBean" class="com.example.MyBean"/>
+<alias name="myBean" alias="myAlias"/>
+<alias name="myBean" alias="myOtherAlias"/>
+
+```
+
+In this example, we have defined a bean of type  `MyBean`  with an id of  `myBean`. We have then defined two aliases for the bean -  `myAlias`  and  `myOtherAlias`.
+
+## Step 23 - Mixing XML Context with Component Scan for Beans defined with Annotations
+
+In the previous steps, we have learned how to define the Spring application context using XML. We have also learned how to use  component scanning  to automatically detect and register beans defined with annotations. In this step, we will learn how to mix XML context with component scan.
+
+### Why Mix XML Context with Component Scan?
+
+Although component scanning is a powerful feature of Spring, there may be cases where we need to define beans using XML configuration. For example, we may need to define beans with  complex initialization logic  or we may need to use property placeholders. In such cases, we can mix  XML context  with component scan.
+
+### How to Mix XML Context with Component Scan?
+
+To mix XML context with component scan, we can define the XML configuration file and enable component scanning in the same application context.
+
+Here's an example of how to define the XML configuration file:
+
+```
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <context:property-placeholder location="classpath:application.properties"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <bean id="myBean" class="com.example.MyBean"/>
+
+</beans>
+
+```
+
+In this example, we have defined two beans using  XML configuration  -  `dataSource`  and  `myBean`. We have also loaded property placeholders from the  `application.properties`  file.
+
+To enable component scanning, we can add the following line to the XML configuration file:
+
+```
+<context:component-scan base-package="com.example"/>
+
+```
+
+This tells Spring to scan the  `com.example`  package for beans defined with annotations.
+
+We can then use the beans defined in the XML configuration file and the beans detected by component scanning in the same application context.
+
+```
+ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+MyBean myBean = context.getBean(MyBean.class);
+myBean.doSomething();
+
+```
+
+In this example, we have created an instance of  `ClassPathXmlApplicationContext`  by passing the  `applicationContext.xml`  file path  as a parameter. We have then retrieved the  `MyBean`  bean from the context and called its  `doSomething()`  method. The  `MyBean`  bean is defined using XML configuration.
+
+A property placeholder is a placeholder used in the  Spring XML configuration file  to specify a value that can be resolved at runtime from a property file or environment variables. It allows us to externalize the configuration and change values at runtime without modifying the code.
+
+Here's an example of how to define a  property placeholder  in the Spring XML configuration file:
+
+
+```
+<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="${jdbc.driverClassName}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+</bean>
+
+```
+
+In this example, we have defined a bean of type  `BasicDataSource`  and used property placeholders for the  driver class name,  URL, username, and password.
+
+We can replace these placeholders with actual values at runtime by defining them in a  property file. Here's an example of a property file named  `application.properties`:
+
+```
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/mydb
+jdbc.username=root
+jdbc.password=password
+
+```
+
+We can then load this property file at runtime using  `PropertyPlaceholderConfigurer`:
+
+```
+<context:property-placeholder location="classpath:application.properties"/>
+
+```
+
+This will replace the placeholders in the Spring  XML configuration file  with the values from the  `application.properties`  file at runtime.
+
+In Spring, an alias is an alternative name or identifier for a bean. It allows us to refer to a bean by multiple names. We can define one or more aliases for a single bean.
+
+Here's an example of how to define aliases for a bean in the  Spring XML configuration file:
+
+```
+<bean id="myBean" class="com.example.MyBean"/>
+<alias name="myBean" alias="myAlias"/>
+<alias name="myBean" alias="myOtherAlias"/>
+
+```
+
+In this example, we have defined a bean of type  `MyBean`  with an id of  `myBean`. We have then defined two aliases for the bean -  `myAlias`  and  `myOtherAlias`.
+
+We can then use any of these names to retrieve the bean from the  Spring application context:
+
+```
+ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+MyBean myBean = context.getBean("myBean", MyBean.class);
+MyBean myAlias = context.getBean("myAlias", MyBean.class);
+MyBean myOtherAlias = context.getBean("myOtherAlias", MyBean.class);
+
+```
+
+In this example, we have retrieved the bean using the original name  `myBean`, as well as the aliases  `myAlias`  and  `myOtherAlias`. All three calls will return the same instance of the  `MyBean`  bean.
