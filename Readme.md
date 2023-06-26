@@ -1260,3 +1260,81 @@ public class DemoApplication {
 In this example, we have annotated the  `DemoApplication`  class with  `@RestController`  and  `@SpringBootApplication`. We have also added a  `@GetMapping`  annotation to the  `hello()`  method to handle GET requests.
 
 When we run the application using  `./mvnw spring-boot:run`  command, Spring Boot starts an  embedded Tomcat server  and deploys our application to it. We can then open a web browser and navigate to  `http://localhost:8080`  to see the "Hello, World!" message returned by the API.
+
+## Step 08 - Build Faster with Spring Boot DevTools
+
+Spring Boot  DevTools is a set of tools that can help you develop Spring Boot applications more efficiently. It includes several features that can help you speed up your development process, such as  automatic restarts,  live reload, and improved  error reporting.
+
+### Automatic restarts
+
+One of the most useful features of  Spring Boot DevTools  is automatic restarts. This feature will automatically restart your application whenever you make changes to your code. This can save you a lot of time since you don't have to manually restart your application every time you make changes.
+
+To use automatic restarts, you need to include the  `spring-boot-devtools`  dependency in your project:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+```
+
+Once you have included the dependency, you can start your application using the  `spring-boot:run`  command. Spring Boot DevTools will automatically detect changes to your code and restart your application.
+
+### Live reload
+
+In addition to automatic restarts, Spring Boot DevTools also includes a live reload feature. This feature will automatically reload your changes in the browser whenever you make changes to your code. This can save you even more time since you don't have to manually refresh your browser every time you make changes.
+
+To use live reload, you need to include the  `spring-boot-devtools`  dependency and a  JavaScript library  in your project:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.webjars</groupId>
+    <artifactId>webjars-locator</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.webjars</groupId>
+    <artifactId>jquery</artifactId>
+    <version>3.6.0</version>
+</dependency>
+
+```
+
+Once you have included the dependencies, you can add the  JavaScript  library to your  HTML file:
+
+```
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/spring-boot-devtools/2.6.0/devtools.js"></script>
+
+```
+
+With the JavaScript library in place, Spring Boot DevTools will automatically reload your changes in the browser whenever you make changes to your code.
+
+### Improved error reporting
+
+Finally, Spring Boot DevTools includes improved error reporting. When an error occurs in your application, Spring Boot DevTools will display a more detailed error page that includes information about the error, the  stack trace, and other useful information.
+
+To use improved error reporting, you need to include the  `spring-boot-devtools`  dependency in your project:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+```
+
+Once you have included the dependency, Spring Boot DevTools will automatically display the improved error page whenever an error occurs in your application.
+
+## Conclusion
+
+Spring Boot DevTools can help you develop  Spring Boot applications  more efficiently by providing features such as automatic restarts, live reload, and improved error reporting. By including the  `spring-boot-devtools`  dependency in your project, you can take advantage of these features and speed up your development process.
