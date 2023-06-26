@@ -774,23 +774,26 @@ public class MyBean {
 In the above example, the  `cleanup()`  method will be called just before the  `MyBean`  is destroyed. This method can be used to release any resources held by the bean, such as closing a database connection or releasing a file handle.
 
 It is important to note that the  `@PostConstruct`  and  `@PreDestroy`  annotations only work with singleton scoped beans. If a bean is defined with a different scope, such as  prototype scope, these annotations will not be effective.
-Step 19 - Removing Spring Boot in Basic Application
-In this step, we remove the Spring Boot framework from our basic application and replace it with the Spring Framework. Here are the steps we need to follow:
+## Step 19 - Removing Spring Boot in Basic Application
 
-Remove the spring-boot-starter-web dependency from the pom.xml file.
-Add the spring-webmvc and spring-context dependencies to the pom.xml file.
-Create a WebAppInitializer class that extends the AbstractAnnotationConfigDispatcherServletInitializer class.
-In the WebAppInitializer class, implement the getRootConfigClasses() and getServletConfigClasses() methods to define the root configuration and the servlet configuration.
-Create a WebConfig class that extends the WebMvcConfigurerAdapter class and annotate it with the @Configuration annotation.
-In the WebConfig class, override the configureDefaultServletHandling() method and call the enable() method on the DefaultServletHandlerConfigurer object.
-In the WebConfig class, create a ViewResolver bean to configure the view resolver.
-Create a controller class that handles requests and returns a view.
-Step 20 - Fixing minor stuff - Add Logback and Close Application Context
-In this final step, we add the Logback logging framework to our application and make sure that the application context is closed properly when the application shuts down.
+In this step, we remove the  Spring Boot  framework from our basic application and replace it with the Spring Framework. Here are the steps we need to follow:
 
-Add the Logback dependencies to the pom.xml file:
-xml
-Copy
+1.  Remove the  `spring-boot-starter-web`  dependency from the  `pom.xml`  file.
+2.  Add the  `spring-webmvc`  and  `spring-context`  dependencies to the  `pom.xml`  file.
+3.  Create a  `WebAppInitializer`  class that extends the  `AbstractAnnotationConfigDispatcherServletInitializer`  class.
+4.  In the  `WebAppInitializer`  class, implement the  `getRootConfigClasses()`  and  `getServletConfigClasses()`  methods to define the  root configuration  and the  servlet configuration.
+5.  Create a  `WebConfig`  class that extends the  `WebMvcConfigurerAdapter`  class and annotate it with the  `@Configuration`  annotation.
+6.  In the  `WebConfig`  class, override the  `configureDefaultServletHandling()`  method and call the  `enable()`  method on the  `DefaultServletHandlerConfigurer`  object.
+7.  In the  `WebConfig`  class, create a  `ViewResolver`  bean to configure the view resolver.
+8.  Create a controller class that handles requests and returns a view.
+
+## Step 20 - Fixing minor stuff - Add Logback and Close Application Context
+
+In this final step, we add the  Logback logging framework  to our application and make sure that the application context is closed properly when the application shuts down.
+
+1.  Add the  Logback dependencies  to the  `pom.xml`  file:
+
+```
 <dependencies>
     <!-- ... -->
     <dependency>
@@ -804,9 +807,12 @@ Copy
         <version>1.2.3</version>
     </dependency>
 </dependencies>
-Create a logback.xml file in the src/main/resources directory to configure Logback. Here's an example configuration:
-xml
-Copy
+
+```
+
+2.  Create a  `logback.xml`  file in the  `src/main/resources`  directory to configure Logback. Here's an example configuration:
+
+```
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -817,18 +823,26 @@ Copy
         <appender-ref ref="CONSOLE" />
     </root>
 </configuration>
-Note: The above Logback configuration will log messages to the console in a specific format.
 
-In the WebConfig class, add the following method to configure Logback:
-java
-Copy
+```
+
+Note: The above  Logback configuration  will log messages to the console in a specific format.
+
+3.  In the  `WebConfig`  class, add the following method to configure Logback:
+
+
+```
 @Bean
 public LoggerContext loggerContext() {
     return (LoggerContext) LoggerFactory.getILoggerFactory();
 }
-In the Main class, add the following code to close the application context when the application shuts down:
-java
-Copy
+
+```
+
+4.  In the  `Main`  class, add the following code to close the application context when the application shuts down:
+
+
+```
 public static void main(String[] args) {
     try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
         // Run the application
@@ -836,4 +850,7 @@ public static void main(String[] args) {
         LOGGER.error("Error while running the application", e);
     }
 }
-Note: The AnnotationConfigApplicationContext class implements the AutoCloseable interface, which means that we can use it in a try-with-resources statement to automatically close the application context when the application exits.
+
+```
+
+Note: The  `AnnotationConfigApplicationContext`  class implements the  `AutoCloseable`  interface, which means that we can use it in a try-with-resources statement to automatically close the  application context  when the application exits.
