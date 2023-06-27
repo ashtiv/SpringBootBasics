@@ -1964,3 +1964,99 @@ SELECT * FROM person;
 ## Conclusion
 
 In this step, we created a database table in H2 and populated it with some data. We also updated the  `Person`  entity to include a constructor, and created a  `DataLoader`  component to populate the data. In the next steps, we will look at working with  JDBC  and  JPA  in more detail.
+
+## Step 05: Implementing findAll Persons  Spring JDBC  Query Method
+
+In this step, we will learn how to implement a Spring JDBC query method to retrieve all persons from the database.
+
+We will first create a  `PersonRowMapper`  class to map the result set to a  `Person`  object:
+
+```
+public class PersonRowMapper implements RowMapper<Person> {
+
+    @Override
+    public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Person person = new Person();
+        person.setId(rs.getLong("id"));
+        person.setFirstName(rs.getString("first_name"));
+        person.setLastName(rs.getString("last_name"));
+        return person;
+    }
+}
+
+```
+
+Next, we will create a  `PersonJdbcRepository`  class to implement the  query method:
+
+```
+@Repository
+public class PersonJdbcRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public List<Person> findAll() {
+        return jdbcTemplate.query("SELECT * FROM person", new PersonRowMapper());
+    }
+}
+
+```
+
+Finally, we can test the query method by injecting the  `PersonJdbcRepository`  into a service or controller and calling the  `findAll`  method:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonJdbcRepository personJdbcRepository;
+
+    @GetMapping
+    public List<Person> getAllPersons() {
+        return personJdbcRepository.findAll();
+    }
+}
+
+```
+
+## Step 06: Executing the findAll Method Using CommandLineRunner
+
+In this step, we will learn how to execute the  `findAll`  method using the  `CommandLineRunner`  interface.
+
+We will first create a  `CommandLineAppStartupRunner`  class:
+
+```
+@Component
+public class CommandLineAppStartupRunner implements CommandLineRunner {
+
+    @Autowired
+    private PersonJdbcRepository personJdbcRepository;
+
+    @Override
+    public void run(String... args) throws Exception {
+        List<Person> persons = personJdbcRepository.findAll();
+        for (Person person : persons) {
+            System.out.println(person.getFirstName() + " " + person.getLastName());
+        }
+    }
+}
+
+```
+
+We can then run the application and check the console output to ensure that the  `findAll`  method is properly executed.
+
+```
+@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+
+```
+
+## Conclusion
+
+In this tutorial, we learned how to work with databases in  Spring Boot  using JDBC and JPA. We created a  database table  in H2 and populated it with some data, and we implemented a  Spring JDBC query method  to retrieve all persons from the database. We also learned how to execute the query method using the  `CommandLineRunner`  interface.
