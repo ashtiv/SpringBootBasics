@@ -1710,3 +1710,118 @@ Spring Boot is a framework built on top of Spring that makes it easier to build 
 ## Conclusion
 
 In this step, we looked at the differences between Spring Boot, Spring, and Spring MVC. We saw that Spring is a powerful framework for building enterprise applications, Spring MVC is a web framework built on top of Spring that provides a model-view-controller architecture for building  web applications, and Spring Boot is a framework built on top of Spring that makes it easier to build and run Spring applications. By understanding the differences between these frameworks, you can choose the one that best suits your needs and build better applications.
+
+# 80. Step 01 - Setting up a project with JDBC, JPA, H2 and Web Dependencies
+
+In this step, we will set up a new  Spring Boot project  with the necessary dependencies for working with JDBC, JPA, H2, and web applications.
+
+## Dependencies
+
+To work with JDBC and JPA, we will need to add the following dependencies to our  `pom.xml`  file:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+```
+
+We will also add the  H2 database dependency, which we will use for testing our application:
+
+```
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>test</scope>
+</dependency>
+
+```
+
+Finally, we will add the  web dependency, which we will use to expose our data through a  RESTful API:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+```
+
+## Configuration
+
+We will configure our  data source  in our  `application.properties`  file:
+
+
+```
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+```
+
+We will also enable  JPA auditing  by adding the following property:
+
+```
+spring.jpa.hibernate.ddl-auto=create-drop
+
+```
+
+This will create our  database schema  automatically and drop it when the application is shut down.
+
+## Testing
+
+We will create a simple  `Employee`  entity to test our  database configuration:
+```
+@Entity
+public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private String department;
+
+    // getters and setters
+}
+
+```
+
+We will then create a  `JpaRepository`  for accessing our  `Employee`  entity:
+
+```
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+}
+
+```
+
+Finally, we will create a  RESTful controller  to expose our data:
+
+```
+@RestController
+@RequestMapping("/employees")
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @GetMapping
+    public List<Employee> getEmployees() {
+        return employeeRepository.findAll();
+    }
+
+}
+
+```
+
+## Conclusion
+
+In this step, we set up a new Spring Boot project with the necessary dependencies for working with JDBC, JPA, H2, and  web applications. We also configured our data source and enabled JPA auditing, and created a simple RESTful controller to expose our data. In the next steps, we will look at working with JDBC and JPA in more detail.
