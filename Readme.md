@@ -1672,3 +1672,41 @@ The  `DatabaseHealthIndicator`  can then be registered with Spring Boot using th
 ## Conclusion
 
 In this step, we looked at Spring Boot Actuator, a set of tools for monitoring and managing your Spring Boot application. We saw how to enable Actuator, how to use its endpoints to gather information about your application, and how to customize Actuator using properties or Java configuration. By using Actuator, we can more easily monitor and manage our application, making it easier to keep our application up and running smoothly.
+
+# Step 13 - Understanding Spring Boot vs Spring vs Spring MVC
+
+In this step, we will look at the differences between Spring Boot, Spring, and Spring MVC.
+
+## Spring
+
+Spring is a popular  Java framework  for building enterprise applications. It provides a wide range of features, including  dependency injection, aspect-oriented programming, and transaction management. Spring is modular, allowing you to use only the components you need in your application.
+
+Spring is a powerful framework, but it can be complex to configure and manage. You need to configure a lot of different components to get your application up and running, which can be time-consuming and error-prone.
+
+## Spring MVC
+
+Spring MVC is a  web framework  built on top of Spring. It provides a model-view-controller architecture for building web applications.  Spring MVC  is highly configurable, allowing you to customize your application's behavior and appearance.
+
+To use Spring MVC, you need to configure a number of components, such as controllers, views, and handlers. This can be time-consuming and complex, especially if you are new to the framework.
+
+## Spring Boot
+
+Spring Boot is a framework built on top of Spring that makes it easier to build and run Spring applications.  Spring Boot  provides a number of features that simplify the development process, including auto-configuration, embedded servers, and  starter dependencies.
+
+Auto-configuration allows Spring Boot to automatically configure the components you need in your application, based on the dependencies you have added to your  `pom.xml`  file. This makes it much easier to get your application up and running quickly.
+
+Embedded servers allow you to run your application without needing to install and configure a separate web server. Spring Boot supports a number of embedded servers out of the box, including  Tomcat,  Jetty, and  Undertow.
+
+Starter dependencies provide a set of pre-configured dependencies that you can use in your application. For example, if you want to use  Spring Data JPA  in your application, you can simply add the  `spring-boot-starter-data-jpa`  dependency to your  `pom.xml`  file and Spring Boot will automatically configure the necessary components.
+
+## Spring Boot vs Spring vs Spring MVC
+
+Spring Boot, Spring, and Spring MVC are all related frameworks, but they serve different purposes.
+
+Spring is a powerful framework for building  enterprise applications, but it can be complex to configure and manage. Spring MVC is a web framework built on top of Spring that provides a model-view-controller architecture for building web applications. Spring MVC is highly configurable, but can be time-consuming and complex to set up.
+
+Spring Boot is a framework built on top of Spring that makes it easier to build and run Spring applications. It provides a number of features that simplify the development process, including auto-configuration, embedded servers, and starter dependencies. Spring Boot is ideal for developers who want to quickly build and run Spring applications without needing to spend a lot of time configuring and managing components.
+
+## Conclusion
+
+In this step, we looked at the differences between Spring Boot, Spring, and Spring MVC. We saw that Spring is a powerful framework for building enterprise applications, Spring MVC is a web framework built on top of Spring that provides a model-view-controller architecture for building  web applications, and Spring Boot is a framework built on top of Spring that makes it easier to build and run Spring applications. By understanding the differences between these frameworks, you can choose the one that best suits your needs and build better applications.
