@@ -2214,3 +2214,312 @@ public class PersonController {
 ## Conclusion
 
 In this tutorial, we learned how to work with databases in Spring Boot using JDBC and JPA. We reviewed the differences between JDBC and Spring JDBC, and we learned about Spring Boot Autoconfiguration. We also implemented  Spring JDBC query  and update methods to retrieve, delete, insert, and update persons in the database. By following these steps, we can create a robust and efficient database-driven application using Spring Boot.
+
+## Step 12: Creating a Custom Spring  JDBC RowMapper
+
+In this step, we will learn how to create a custom  `RowMapper`  in Spring JDBC.
+
+A  `RowMapper`  is used to map the result set of a  SQL query  to a Java object. We can create a custom  `RowMapper`  to map the result set to a more complex object.
+
+We will create a  `PersonWithAddressRowMapper`  class that extends the  `PersonRowMapper`  class and maps the result set to a  `PersonWithAddress`  object:
+
+java
+
+Copy
+
+```
+public class PersonWithAddressRowMapper extends PersonRowMapper {
+
+    @Override
+    public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Person person = super.mapRow(rs, rowNum);
+        Address address = new Address();
+        address.setStreet(rs.getString("street"));
+        address.setCity(rs.getString("city"));
+        address.setState(rs.getString("state"));
+        address.setZip(rs.getString("zip"));
+        person.setAddress(address);
+        return person;
+    }
+}
+
+```
+
+We can then update the  `PersonJdbcRepository`  class to use the  `PersonWithAddressRowMapper`:
+
+java
+
+Copy
+
+```
+@Repository
+public class PersonJdbcRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public List<Person> findAll() {
+        return jdbcTemplate.query("SELECT * FROM person", new PersonRowMapper());
+    }
+
+    public Person findById(Long id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM person WHERE id=?", new Object[]{id}, new PersonRowMapper());
+    }
+
+    public void save(Person person) {
+        // ...
+    }
+
+    public void deleteById(Long id) {
+        // ...
+    }
+
+    public List<Person> findAllWithAddress() {
+        return jdbcTemplate.query("SELECT p.*, a.street, a.city, a.state, a.zip FROM person p LEFT JOIN address a ON p.id = a.person_id", new PersonWithAddressRowMapper());
+    }
+}
+
+```
+
+We can then test the  `findAllWithAddress`  method by calling it from a service or controller.
+
+## Step 13: Quick Introduction to JPA
+
+In this step, we will learn about JPA (Java Persistence API), which is a  Java specification  for object-relational mapping (ORM).
+
+JPA provides a set of interfaces and annotations that allow us to map Java objects to database entities. JPA is implemented by various  ORM frameworks, such as  Hibernate,  EclipseLink, and  OpenJPA.
+
+JPA provides a higher-level abstraction over JDBC and allows us to work with objects instead of raw SQL statements.
+
+## Step 14: Defining Person Entity
+
+In this step, we will define a  `Person`  entity class  that will be mapped to a  database table  using JPA.
+
+We will annotate the  `Person`  class with the  `@Entity`  annotation to indicate that it is a JPA entity. We will also annotate the  `id`  field with the  `@Id`  annotation to indicate that it is the primary key:
+
+```
+@Entity
+public class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String firstName;
+
+    private String lastName;
+
+    // getters and setters
+}
+
+```
+
+We can also annotate the  `firstName`  and  `lastName`  fields with the  `@Column`  annotation to specify the column names:
+
+```
+@Entity
+public class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    // getters and setters
+}
+
+```
+
+## Step 15: Implementing findById  JPA Repository  Method
+
+In this step, we will implement a  JPA repository method  to retrieve a person by ID.
+
+We will create a  `PersonRepository`  interface that extends the  `JpaRepository`  interface provided by  Spring Data  JPA. We will then define a  `findById`  method in the  `PersonRepository`  interface:
+
+```
+@Repository
+public interface PersonRepository extends JpaRepository<Person, Long> {
+
+    Optional<Person> findById(Long id);
+}
+
+```
+
+We can then inject the  `PersonRepository`  into a service or controller and call the  `findById`  method:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @GetMapping("/{id}")
+    public Person getPersonById(@PathVariable Long id) {
+        return personRepository.findById(id).orElse(null);
+    }
+}
+
+```
+
+## Step 16: Implementing insert and update JPA Repository Methods
+
+In this step, we will implement JPA repository methods to insert and update persons in the database.
+
+We will update the  `PersonRepository`  interface to include the  `save`  method:
+
+```
+@Repository
+public interface PersonRepository extends JpaRepository<Person, Long> {
+
+    Optional<Person> findById(Long id);
+
+    Person save(Person person);
+}
+
+```
+
+We can then test the  `save`  method by calling it from a service or controller:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @PostMapping
+    public void addPerson(@RequestBody Person person) {
+        personRepository.save(person);
+    }
+
+    @PutMapping("/{id}")
+    public void updatePerson(@PathVariable Long id, @RequestBody Person person) {
+        person.setId(id);
+        personRepository.save(person);
+    }
+}
+
+```
+
+## Step 17: Implementing deleteById JPA Repository Method
+
+In this step, we will implement a JPA repository method to delete a person by ID.
+
+We will update the  `PersonRepository`  interface to include the  `deleteById`  method:
+
+```
+@Repository
+public interface PersonRepository extends JpaRepository<Person, Long> {
+
+    Optional<Person> findById(Long id);
+
+    Person save(Person person);
+
+    void deleteById(Long id);
+}
+
+```
+
+We can then test the  `deleteById`  method by calling it from a service or controller:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @DeleteMapping("/{id}")
+    public void deletePersonById(@PathVariable Long id) {
+        personRepository.deleteById(id);
+    }
+}
+
+```
+
+## Step 18: Implementing findAll using JPQL Named Query
+
+In this step, we will implement a JPA repository method to retrieve all persons from the database using a JPQL (Java Persistence Query Language) named query.
+
+We will create a named query in the  `Person`  entity class using the  `@NamedQuery`  annotation:
+
+```
+@Entity
+@NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p")
+public class Person {
+
+    // ...
+}
+
+```
+
+We will then update the  `PersonRepository`  interface to include the  `findAll`  method:
+
+```
+@Repository
+public interface PersonRepository extends JpaRepository<Person, Long> {
+
+    Optional<Person> findById(Long id);
+
+    Person save(Person person);
+
+    void deleteById(Long id);
+
+    List<Person> findAll();
+}
+
+```
+
+We can then test the  `findAll`  method by calling it from a service or controller:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @GetMapping
+    public List<Person> getAllPersons() {
+        return personRepository.findAll();
+    }
+}
+
+```
+
+## Step 19: Introduction to Spring Data JPA
+
+In this step, we will introduce  Spring Data JPA, which is a higher-level abstraction over JPA.
+
+Spring Data JPA provides a set of interfaces and classes that simplify JPA repository creation and provide additional features, such as  query methods  and pagination.
+
+To use Spring Data JPA, we simply need to create an interface that extends one of the Spring Data JPA repository interfaces, such as  `JpaRepository`  or  `CrudRepository`.
+
+## Step 20: Connecting to Other Databases
+
+In this step, we will learn how to connect to other databases using Spring Boot.
+
+Spring Boot  provides autoconfiguration for several popular databases, such as  MySQL,  PostgreSQL, and Oracle. We can simply include the  database driver dependency  and configure the connection properties in the  `application.properties`  file.
+
+For example, to connect to a  MySQL database, we can add the following properties to the  `application.properties`  file:
+
+
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/mydatabase
+spring.datasource.username=root
+spring.datasource.password=password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+```
+
+We can also configure multiple  data sources  by creating multiple  `DataSource`  beans and annotating them with  `@ConfigurationProperties`  and  `@Primary`  annotations.
