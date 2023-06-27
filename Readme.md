@@ -1520,3 +1520,78 @@ employees.employees[1].age=25
 The properties will be bound to the corresponding fields in the  `EmployeeProperties`  class, including the list of  `Employee`  objects.
 
 In summary, the  `ConfigurationProperties`  annotation is a powerful feature in Java that allows you to externalize configuration properties and bind them to fields in a class. This provides a simple and efficient way to manage configuration properties in an application.
+# Step 11 - Get Production Ready with  Spring Boot  - 3 - Embedded Servers
+
+In this step, we will look at embedded servers in Spring Boot and how they can be used to deploy our application.
+
+## What is an Embedded Server?
+
+An embedded server is a web server that is packaged with your application. Unlike traditional web servers, where applications are deployed onto the server, an embedded server deploys the application within itself. This makes it easier to deploy and manage your application, as you don't need to install and configure a separate web server.
+
+Spring Boot comes with a number of embedded servers out of the box, including  Tomcat,  Jetty, and Undertow. These servers can be used to deploy your application, and can be configured programmatically or via configuration files.
+
+## Configuring an Embedded Server
+
+To configure an embedded server, you need to add the relevant dependency to your  `pom.xml`  file. For example, to use Tomcat, you would add the following dependency:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-tomcat</artifactId>
+</dependency>
+
+```
+
+Similarly, to use Jetty, you would add the following dependency:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+
+```
+
+And to use  Undertow, you would add the following dependency:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-undertow</artifactId>
+</dependency>
+
+```
+
+Once you have added the relevant dependency, you can configure the embedded server by setting properties in your  `application.properties`  file. For example, to configure Tomcat to listen on port 8080, you would add the following property:
+
+```
+server.port=8080
+
+```
+
+Similarly, to configure Jetty to use  HTTPS, you would add the following properties:
+
+```
+server.ssl.enabled=true
+server.ssl.key-store-type=PKCS12
+server.ssl.key-store=classpath:keystore.p12
+server.ssl.key-store-password=password
+
+```
+
+## Running an Embedded Server
+
+To run an embedded server, you simply need to run your Spring Boot application. If you have configured multiple embedded servers, Spring Boot will automatically choose the appropriate server based on the dependencies you have added.
+
+For example, if you have added the  Tomcat dependency  to your  `pom.xml`  file and have configured the  `server.port`  property in your  `application.properties`  file, you can run your application using the following command:
+
+```
+mvn spring-boot:run
+
+```
+
+This will start your application using Tomcat, listening on the configured port.
+
+## Conclusion
+
+In this step, we looked at embedded servers in Spring Boot and how they can be used to deploy our application. We also saw how to configure and run an embedded server. By using an embedded server, we can simplify the deployment and management of our application, making it easier to get our application up and running quickly.
