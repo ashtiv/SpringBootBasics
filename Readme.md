@@ -1595,3 +1595,80 @@ This will start your application using Tomcat, listening on the configured port.
 ## Conclusion
 
 In this step, we looked at embedded servers in Spring Boot and how they can be used to deploy our application. We also saw how to configure and run an embedded server. By using an embedded server, we can simplify the deployment and management of our application, making it easier to get our application up and running quickly.
+
+# Step 12 - Get Production Ready with  Spring Boot  - 4 - Actuator
+
+In this step, we will look at  Spring Boot Actuator, a set of tools for monitoring and managing your Spring Boot application.
+
+## What is Spring Boot Actuator?
+
+Spring Boot Actuator is a set of tools for monitoring and managing your Spring Boot application. It provides a number of endpoints that can be used to gather information about your application, such as health, metrics, and environment information. Actuator also provides a number of tools for managing your application, such as shutting down the application and reloading the configuration.
+
+Actuator is included in all  Spring Boot projects  by default, and can be easily configured using properties or  Java configuration.
+
+## Enabling Actuator
+
+To enable Actuator in your  Spring Boot application, you simply need to add the  `spring-boot-starter-actuator`  dependency to your  `pom.xml`  file:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+```
+
+Once you have added the dependency, Actuator will be enabled by default and will expose a number of endpoints.
+
+## Actuator Endpoints
+
+Actuator provides a number of endpoints that can be used to gather information about your application. Some of the most commonly used endpoints are listed below:
+
+-   `/actuator/health`: Returns application  health information.
+-   `/actuator/info`: Returns application information, such as the version number.
+-   `/actuator/metrics`: Returns application metrics, such as  memory usage  and CPU usage.
+-   `/actuator/env`: Returns environment information, such as system properties and environment variables.
+-   `/actuator/loggers`: Returns and manages the logging configuration.
+-   `/actuator/shutdown`: Shuts down the application.
+
+These endpoints can be accessed using HTTP requests. For example, to access the  health endpoint, you can use the following URL:
+
+
+```
+http://localhost:8080/actuator/health
+
+```
+
+## Customizing Actuator
+
+Actuator can be customized using properties or  Java  configuration. For example, to change the port that Actuator listens on, you can add the following property to your  `application.properties`  file:
+
+```
+management.server.port=8081
+
+```
+
+Similarly, to customize the health endpoint, you can create a new  `HealthIndicator`  and register it with Spring Boot. For example, the following code creates a new  `HealthIndicator`  that checks the status of a database:
+
+```
+@Component
+public class DatabaseHealthIndicator implements HealthIndicator {
+
+    @Override
+    public Health health() {
+        // Check the status of the database
+        if (databaseIsUp()) {
+            return Health.up().build();
+        } else {
+            return Health.down().build();
+        }
+    }
+}
+
+```
+
+The  `DatabaseHealthIndicator`  can then be registered with Spring Boot using the  `@Component`  annotation.
+
+## Conclusion
+
+In this step, we looked at Spring Boot Actuator, a set of tools for monitoring and managing your Spring Boot application. We saw how to enable Actuator, how to use its endpoints to gather information about your application, and how to customize Actuator using properties or Java configuration. By using Actuator, we can more easily monitor and manage our application, making it easier to keep our application up and running smoothly.
