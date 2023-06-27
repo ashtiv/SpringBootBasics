@@ -1825,3 +1825,142 @@ public class EmployeeController {
 ## Conclusion
 
 In this step, we set up a new Spring Boot project with the necessary dependencies for working with JDBC, JPA, H2, and  web applications. We also configured our data source and enabled JPA auditing, and created a simple RESTful controller to expose our data. In the next steps, we will look at working with JDBC and JPA in more detail.
+
+
+
+# 82. Step 02 - Launching up H2 Console
+
+In this step, we will launch the  H2 console  to interact with our database.
+
+To launch the H2 console, we will first need to add the H2 console dependency to our  `pom.xml`  file:
+
+```
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+```
+
+We will then need to configure the H2 console in our  `application.properties`  file:
+
+```
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+```
+
+Finally, we can launch the H2 console by navigating to  `http://localhost:8080/h2-console`  in a web browser.
+
+# 83. Updates to Step 03 and Step 04
+
+In Step 03, we will need to update the  H2 database URL  to  `jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1`.
+
+In Step 04, we will need to update the  `Person`  entity to use  `@GeneratedValue(strategy = GenerationType.IDENTITY)`  instead of  `@GeneratedValue(strategy = GenerationType.AUTO)`.
+
+# 84. Step 03 - Creating a  Database Table  in H2
+
+In this step, we will create a database table in H2.
+
+We will first create a  `Person`  entity:
+
+```
+@Entity
+public class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String firstName;
+
+    private String lastName;
+
+    // getters and setters
+}
+
+```
+
+We will then create a  `PersonRepository`:
+
+```
+@Repository
+public interface PersonRepository extends JpaRepository<Person, Long> {
+}
+
+```
+
+Finally, we will create a  SQL script  to create the  `person`  table:
+
+```
+CREATE TABLE person (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL
+);
+
+```
+
+# 85. Step 04 - Populate data into Person Table
+
+In this step, we will populate data into the  `person`  table.
+
+We will first create a  `DataLoader`  component that will populate some data into the  `person`  table:
+
+java
+
+Copy
+
+```
+@Component
+public class DataLoader implements CommandLineRunner {
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Override
+    public void run(String... args) throws Exception {
+        personRepository.save(new Person("John", "Doe"));
+        personRepository.save(new Person("Jane", "Doe"));
+    }
+}
+
+```
+
+We will also update the  `Person`  entity to include a constructor:
+
+```
+@Entity
+public class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String firstName;
+
+    private String lastName;
+
+    public Person() {}
+
+    public Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    // getters and setters
+}
+
+```
+
+Finally, we can test our application by launching the H2 console and running a query to retrieve the data from the  `person`  table:
+
+```
+SELECT * FROM person;
+
+```
+
+## Conclusion
+
+In this step, we created a database table in H2 and populated it with some data. We also updated the  `Person`  entity to include a constructor, and created a  `DataLoader`  component to populate the data. In the next steps, we will look at working with  JDBC  and  JPA  in more detail.
