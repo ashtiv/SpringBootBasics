@@ -2060,3 +2060,157 @@ public class DemoApplication {
 ## Conclusion
 
 In this tutorial, we learned how to work with databases in  Spring Boot  using JDBC and JPA. We created a  database table  in H2 and populated it with some data, and we implemented a  Spring JDBC query method  to retrieve all persons from the database. We also learned how to execute the query method using the  `CommandLineRunner`  interface.
+
+## Step 07: A Quick Review - JDBC vs Spring JDBC
+
+In this step, we will do a quick review of JDBC and  Spring JDBC.
+
+JDBC (Java Database Connectivity) is a Java  API  that provides a standard way to interact with relational databases. With JDBC, we can create  database connections, execute  SQL statements, and retrieve results from the database.
+
+Spring JDBC is a part of the  Spring Framework  that provides a higher-level abstraction over JDBC. Spring JDBC provides a set of classes and methods to simplify database access, such as the  `JdbcTemplate`  class, which provides a convenient way to execute SQL statements and map the results to  Java objects.
+
+One of the key benefits of Spring JDBC is its ability to handle exceptions and  boilerplate code, which can make database access much easier and more efficient.
+
+## Step 08: Understanding Spring Boot Autoconfiguration
+
+In this step, we will learn about  Spring Boot  Autoconfiguration.
+
+Spring Boot Autoconfiguration is a feature of Spring Boot that automatically configures beans based on the dependencies present in the classpath.  Spring Boot Autoconfiguration  can help reduce boilerplate code and simplify configuration by automatically configuring common components and providing sensible defaults.
+
+For example, if we include the  H2 database dependency  in our project, Spring Boot will automatically create an  H2 database connection  and configure it for us. We can also customize the configuration by providing our own properties in the  `application.properties`  file.
+
+## Step 09: Implementing findById Spring JDBC Query Method
+
+In this step, we will learn how to implement a  Spring JDBC query method  to retrieve a person by ID.
+
+We will first update the  `PersonJdbcRepository`  class to include the  `findById`  method:
+
+```
+@Repository
+public class PersonJdbcRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public List<Person> findAll() {
+        return jdbcTemplate.query("SELECT * FROM person", new PersonRowMapper());
+    }
+
+    public Person findById(Long id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM person WHERE id=?", new Object[]{id}, new PersonRowMapper());
+    }
+}
+
+```
+
+Next, we can test the  `findById`  method by calling it from a service or controller:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonJdbcRepository personJdbcRepository;
+
+    @GetMapping("/{id}")
+    public Person getPersonById(@PathVariable Long id) {
+        return personJdbcRepository.findById(id);
+    }
+}
+
+```
+
+## Step 10: Implementing deleteById Spring JDBC Update Method
+
+In this step, we will learn how to implement a Spring JDBC update method to delete a person by ID.
+
+We will update the  `PersonJdbcRepository`  class to include the  `deleteById`  method:
+
+```
+@Repository
+public class PersonJdbcRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public void deleteById(Long id) {
+        jdbcTemplate.update("DELETE FROM person WHERE id=?", id);
+    }
+}
+
+```
+
+We can then test the  `deleteById`  method by calling it from a service or controller:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonJdbcRepository personJdbcRepository;
+
+    @DeleteMapping("/{id}")
+    public void deletePersonById(@PathVariable Long id) {
+        personJdbcRepository.deleteById(id);
+    }
+}
+
+```
+
+## Step 11: Implementing insert and update Spring JDBC Update Methods
+
+In this step, we will learn how to implement Spring JDBC update methods to insert and update persons in the database.
+
+We will update the  `PersonJdbcRepository`  class to include the  `save`  method:
+
+```
+@Repository
+public class PersonJdbcRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public void save(Person person) {
+        if (person.getId() == null) {
+            // Insert
+            jdbcTemplate.update("INSERT INTO person (first_name, last_name) VALUES (?, ?)",
+                    person.getFirstName(), person.getLastName());
+        } else {
+            // Update
+            jdbcTemplate.update("UPDATE person SET first_name=?, last_name=? WHERE id=?",
+                    person.getFirstName(), person.getLastName(), person.getId());
+        }
+    }
+}
+
+```
+
+We can then test the  `save`  method by calling it from a service or controller:
+
+```
+@RestController
+@RequestMapping("/persons")
+public class PersonController {
+
+    @Autowired
+    private PersonJdbcRepository personJdbcRepository;
+
+    @PostMapping
+    public void addPerson(@RequestBody Person person) {
+        personJdbcRepository.save(person);
+    }
+
+    @PutMapping("/{id}")
+    public void updatePerson(@PathVariable Long id, @RequestBody Person person) {
+        person.setId(id);
+        personJdbcRepository.save(person);
+    }
+}
+
+```
+
+## Conclusion
+
+In this tutorial, we learned how to work with databases in Spring Boot using JDBC and JPA. We reviewed the differences between JDBC and Spring JDBC, and we learned about Spring Boot Autoconfiguration. We also implemented  Spring JDBC query  and update methods to retrieve, delete, insert, and update persons in the database. By following these steps, we can create a robust and efficient database-driven application using Spring Boot.
